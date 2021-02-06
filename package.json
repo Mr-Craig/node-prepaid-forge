@@ -1,6 +1,6 @@
 {
   "name": "prepaid-forge",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "node.js api for prepaid-forge using promises",
   "main": "index.js",
   "scripts": {
