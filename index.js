@@ -24,14 +24,29 @@ PrePaidForge.signInWithApi = async (email,password) => {
                 }
                 reject(body);
             }
+
+            PrePaidForge.email = email;
+            PrePaidForge.password = password;
+
+            if(PrePaidForge.apiToken != body.apiToken) {
+                console.log("PrePaid Forge API: New Token "+PrePaidForge.apiToken)
+            }
+            
             PrePaidForge.apiToken = body.apiToken
-            PrePaidForge.tokenValidUntil = body.tokenValidUntil
+            PrePaidForge.tokenValidUntil = body.tokenValidUntil - 30000;
+
+            
             resolve(body);
         });
     })
 };
 
 PrePaidForge.findAllProducts = async () => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         request({
             method: "GET",
@@ -52,6 +67,11 @@ PrePaidForge.findAllProducts = async () => {
 };
 
 PrePaidForge.findStocks = async (types,skus) => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         if(PrePaidForge.apiToken == "" || PrePaidForge.tokenValidUntil < new Date().getTime()) {
             reject("API Token invalid.");
@@ -81,6 +101,11 @@ PrePaidForge.findStocks = async (types,skus) => {
 };
 
 PrePaidForge.createOrder = async (sku, price, codeType, customOrderReference) => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         if(PrePaidForge.apiToken == "" || PrePaidForge.tokenValidUntil < new Date().getTime()) {
             reject("API Token invalid.");
@@ -111,6 +136,11 @@ PrePaidForge.createOrder = async (sku, price, codeType, customOrderReference) =>
 };
 
 PrePaidForge.getOrders = async (page, startDate, endDate)  => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         if(PrePaidForge.apiToken == "" || PrePaidForge.tokenValidUntil < new Date().getTime()) {
             return reject("API Token invalid.");
@@ -141,6 +171,11 @@ PrePaidForge.getOrders = async (page, startDate, endDate)  => {
 };
 
 PrePaidForge.getOrder = async (customOrderReference) => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         if(PrePaidForge.apiToken == "" || PrePaidForge.tokenValidUntil < new Date().getTime()) {
             reject("API Token invalid.");
@@ -168,6 +203,11 @@ PrePaidForge.getOrder = async (customOrderReference) => {
 }
 
 PrePaidForge.getBalance = async () => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         if(PrePaidForge.apiToken == "" || PrePaidForge.tokenValidUntil < new Date().getTime()) {
             reject("API Token invalid.");
@@ -193,6 +233,11 @@ PrePaidForge.getBalance = async () => {
 }
 
 PrePaidForge.getInvoice = async (invoiceId) => {
+    while(PrePaidForge.tokenValidUntil < new Date().getTime()) {
+        await PrePaidForge.signInWithApi(PrePaidForge.email,PrePaidForge.password).catch(err => {
+            return Promise.reject(err);
+        })
+    }
     return new Promise((resolve, reject) => {
         if(PrePaidForge.apiToken == "" || PrePaidForge.tokenValidUntil < new Date().getTime()) {
             reject("API Token invalid.");
