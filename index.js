@@ -1,11 +1,13 @@
-const request = require('request')
+let request = {};
 
 const PrePaidForge = {}
 
 PrePaidForge.apiToken = "";
 PrePaidForge.tokenValidUntil = 0;
+PrePaidForge.proxy = "";
 
 PrePaidForge.signInWithApi = async (email,password) => {
+    request = require('request').defaults({'proxy': PrePaidForge.proxy});
     return new Promise(async (resolve, reject) => {
         request({
             method: "POST",
